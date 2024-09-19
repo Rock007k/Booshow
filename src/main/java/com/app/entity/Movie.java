@@ -32,22 +32,26 @@ public class Movie {
 	
 	@Column(nullable = false)
 	private String movieName;
-	
-	private int duration;
-	
-	@Column(scale =2)
-	private double rating;
-	
-	
-	private date releaseDate;
-	
-	@Enumerated(value = EnumType.STRING)
-	private Genre genre;
 
-	@Enumerated(value = EnumType.STRING)
-	private Landuage language;
+	public Movie(String movieName) {
+		this.movieName =movieName;
+	}
+
+//	private int duration;
+//
+//	@Column(scale =2)
+//	private double rating;
 	
-	@OneToMany(mappedBy = "movie" , cascade = CascadeType.ALL)
-	private List<Show> shows = new ArrayList()<>();
+	
+//	private date releaseDate;
+//
+//	@Enumerated(value = EnumType.STRING)
+//	private Genre genre;
+//
+//	@Enumerated(value = EnumType.STRING)
+//	private Landuage language;
+	
+//	@OneToMany(mappedBy = "movie" , cascade = CascadeType.ALL)
+//	private List<Show> shows = new ArrayList()<>();
 	
 }

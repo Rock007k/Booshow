@@ -5,9 +5,13 @@ import java.util.Date;
 import com.app.enums.Genre;
 import com.app.enums.Language;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MovieRequest {
 
 	private String movieName;

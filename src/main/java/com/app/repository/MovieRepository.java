@@ -1,6 +1,11 @@
 package com.app.repository;
 
-public class MovieRepository {
+import com.app.entity.Movie;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface MovieRepository extends JpaRepository<Movie,Integer> {
 	
 }
 
