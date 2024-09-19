@@ -15,7 +15,7 @@ public class MovieController {
 		//TODO: process POST request
 		
 	}
-	//delete previous movie
+	//delete previous movies
 	@DeleteMapping("/deletemovie/{id}")
 	public ResponseEntity<String> deleteMethodName(@PathVariable int id){
 
