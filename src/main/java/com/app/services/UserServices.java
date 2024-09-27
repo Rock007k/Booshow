@@ -1,5 +1,7 @@
 package com.app.services;
 
-public interface UserServices {
+import com.app.request.UserRequest;
 
+public interface UserServices {
+    String saveUser(UserRequest userRequest);
 }

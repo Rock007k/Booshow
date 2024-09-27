@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import com.app.entity.Movie;
+import com.app.exceptions.MovieDoesNotExists;
 import com.app.request.MovieRequest;
 import com.app.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +24,51 @@ public class MovieController {
 
 	// admin can new movie
 	@PostMapping("/addNew")
-	public ResponseEntity<String> postMethodName(@RequestBody Movie movie){
+	public ResponseEntity<String> postMethodName(@RequestBody MovieRequest movieRequest){
+		try {
+			String result = movieService.saveMovie(movieRequest);
+			return new ResponseEntity<>(result,HttpStatus.CREATED);
+		} catch (Exception e){
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+	}
 
-		return movieService.saveMovie(movie) ? new ResponseEntity<String>("Movie added", HttpStatus.OK) :
-				new ResponseEntity<String>("Movie not saved",HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+
 	//delete previous movies
-	@DeleteMapping("/deletemovie/{id}")
-	public ResponseEntity<Movie> deleteMethodName(@PathVariable int id){
-		return new ResponseEntity<>(movieService.removeMovie(id),HttpStatus.OK);
+	@DeleteMapping("/deleteMovie/{id}")
+	public ResponseEntity<String> deleteMethodName(@PathVariable Integer id){
+		try {
+			String result = movieService.removeMovie(id);
+			return new ResponseEntity<>(result,HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
 	}
+
+
+
 	//update previous movie
-	@PutMapping("/updateMovie")
-	public ResponseEntity<Movie> updateMethodName(@RequestBody Movie movie){
-		return new ResponseEntity<>(movieService.updateMovie(movie.getId(),movie),HttpStatus.OK);
+	@PutMapping("/updateMovie/{id}")
+	public ResponseEntity<String> updateMethodName(@RequestBody MovieRequest movieRequest, @PathVariable("id") Integer id){
+		try {
+			String result = movieService.updateMovie(id,movieRequest);
+			return new ResponseEntity<>(result,HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
 	}
+
+
+
 	//get the list of the movies
 	@GetMapping("/getMovies")
 	public ResponseEntity<List<Movie>> getAllMovie(){
 		List<Movie> ls = movieService.getMovies();
 		return new ResponseEntity<>(ls,HttpStatus.OK);
 	}
+
+
+
 	//get a particular movie by id
 	@GetMapping("/getMovies/{id}")
 	public ResponseEntity<Movie> getMovie(@PathVariable int id){
@@ -51,7 +76,7 @@ public class MovieController {
 		if(_movie.isPresent()){
 			return new ResponseEntity<>(_movie.get(),HttpStatus.OK);
 		}else {
-			throw new NoSuchElementException("Record not found");
+			throw  new MovieDoesNotExists();
 		}
 	}
 }

@@ -1,14 +1,15 @@
 package com.app.services;
 
 import com.app.entity.Movie;
+import com.app.request.MovieRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
-     boolean saveMovie(Movie movie);
+     String saveMovie(MovieRequest movieRequest);
      List<Movie> getMovies();
      Optional<Movie> getMovieById(int id);
-     Movie removeMovie(int id);
-     Movie updateMovie(int id,Movie movie);
+     String removeMovie(Integer id);
+     String updateMovie(Integer id,MovieRequest movieRequest);
 }

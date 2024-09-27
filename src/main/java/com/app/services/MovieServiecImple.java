@@ -1,7 +1,11 @@
 package com.app.services;
 
+import com.app.convertor.MovieConvertor;
 import com.app.entity.Movie;
+import com.app.exceptions.MovieAlreadyExist;
+import com.app.exceptions.MovieDoesNotExists;
 import com.app.repository.MovieRepository;
+import com.app.request.MovieRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +18,15 @@ public class MovieServiecImple implements MovieService{
     private MovieRepository movieRepository;
 
     @Override
-    public boolean saveMovie(Movie movie) {
+    public String saveMovie(MovieRequest movieRequest) {
+        Movie movieByName = movieRepository.findByMovieName(movieRequest.getMovieName());
+
+        if(movieByName != null && movieByName.getLanguage().equals(movieRequest.getLanguage())){
+            throw new MovieAlreadyExist();
+        }
+        Movie movie = MovieConvertor.movieDtoToMovie(movieRequest);
         movieRepository.save(movie);
-        return true;
+        return "Movie saved";
     }
 
     @Override
@@ -31,26 +41,32 @@ public class MovieServiecImple implements MovieService{
     }
 
     @Override
-    public Movie removeMovie(int id) {
+    public String removeMovie(Integer id) {
         Optional<Movie> _movie = movieRepository.findById(id);
         if(_movie.isPresent()){
             movieRepository.deleteById(id);
+        }else {
+            throw new MovieDoesNotExists();
         }
-        return _movie.get();
+        return "Movie deleted";
     }
 
+
+
     @Override
-    public Movie updateMovie(int id, Movie movie) {
+    public String updateMovie(Integer id, MovieRequest movieRequest) {
         Optional<Movie> _movie = movieRepository.findById(id);
 
         if(_movie.isPresent()){
             Movie movie1 = _movie.get();
-            movie1.setMovieName(movie.getMovieName());
-//            movie1.setDuration(movie.getDuration());
-//            movie1.setGenre(movie.getGenre());
-//            movie1.setRating(movie.getRating());
-//            movie1.setLanguage(movie.);
+            movie1.setMovieName(movieRequest.getMovieName());
+            movie1.setDuration(movieRequest.getDuration());
+            movie1.setGenre(movieRequest.getGenre());
+            movie1.setRating(movieRequest.getRating());
+            movie1.setLanguage(movieRequest.getLanguage());
+        }else {
+            throw new MovieDoesNotExists();
         }
-        return _movie.get();
+        return "Movie Updated successfully";
     }
 }
