@@ -1,7 +1,11 @@
 package com.app.entity;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.app.enums.Genre;
+import com.app.enums.Language;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,22 +36,26 @@ public class Movie {
 	
 	@Column(nullable = false)
 	private String movieName;
-	
-	private int duration;
-	
+
+	public Movie(String movieName) {
+		this.movieName =movieName;
+	}
+
+	private Integer duration;
+
 	@Column(scale =2)
-	private double rating;
+	private Double rating;
 	
 	
-	private date releaseDate;
-	
+	private Date releaseDate;
+
 	@Enumerated(value = EnumType.STRING)
 	private Genre genre;
 
 	@Enumerated(value = EnumType.STRING)
-	private Landuage language;
+	private Language language;
 	
 	@OneToMany(mappedBy = "movie" , cascade = CascadeType.ALL)
-	private List<Show> shows = new ArrayList()<>();
+	private List<Show> shows = new ArrayList<>();
 	
 }
